@@ -161,3 +161,28 @@ public class Main {
         sc.close();
     }
 }
+# Online Examination Management System
+
+This is a simple Java-based console application that simulates an **Online Examination Management System**. It allows an Admin to create an exam and a Student to take it. The system uses OOP principles like inheritance and encapsulation.
+
+## Features
+
+- **Admin Login**
+  - Create an exam with multiple questions.
+- **Student Login**
+  - Take the created exam.
+  - View score after submission.
+
+## Technologies Used
+
+- Java (OOP Concepts)
+- Console-based UI
+- Scanner class for input handling
+- ArrayList for managing questions
+
+## How to Run
+
+1. **Compile the code:**
+   ```bash
+   javac Main.java
+
