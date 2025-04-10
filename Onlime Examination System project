@@ -1,0 +1,164 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+// User Superclass
+class User {
+    protected String username;
+    protected String password;
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public boolean login(String uname, String pass) {
+        return username.equals(uname) && password.equals(pass);
+    }
+
+    public String getUsername() {
+        return username;
+    }
+}
+
+// Admin Class
+class Admin extends User {
+
+    public Admin(String username, String password) {
+        super(username, password);
+    }
+
+    public void createExam(Exam exam) {
+        System.out.println("Exam \"" + exam.getTitle() + "\" created successfully.");
+    }
+}
+
+// Student Class
+class Student extends User {
+    private int score;
+
+    public Student(String username, String password) {
+        super(username, password);
+    }
+
+    public void takeExam(Exam exam) {
+        score = exam.conductExam();
+        System.out.println("You scored: " + score + " out of " + exam.getTotalMarks());
+    }
+
+    public int getScore() {
+        return score;
+    }
+}
+
+// Question Class
+class Question {
+    private String questionText;
+    private String[] options;
+    private int correctOption;
+
+    public Question(String questionText, String[] options, int correctOption) {
+        this.questionText = questionText;
+        this.options = options;
+        this.correctOption = correctOption;
+    }
+
+    public boolean askQuestion() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("\n" + questionText);
+        for (int i = 0; i < options.length; i++) {
+            System.out.println((i + 1) + ". " + options[i]);
+        }
+
+        System.out.print("Your answer (1-4): ");
+        int answer = sc.nextInt();
+        return answer == correctOption;
+    }
+}
+
+// Exam Class
+class Exam {
+    private String title;
+    private ArrayList<Question> questions = new ArrayList<>();
+
+    public Exam(String title) {
+        this.title = title;
+    }
+
+    public void addQuestion(Question q) {
+        questions.add(q);
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public int getTotalMarks() {
+        return questions.size();
+    }
+
+    public int conductExam() {
+        int score = 0;
+        for (Question q : questions) {
+            if (q.askQuestion()) {
+                score++;
+            }
+        }
+        return score;
+    }
+}
+
+// Main Class (Entry Point)
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        Admin admin = new Admin("admin", "admin123");
+        Student student = new Student("student", "pass");
+
+        System.out.println("Welcome to the Online Examination System");
+        System.out.println("Login as: \n1. Admin\n2. Student");
+        System.out.print("Enter your choice: ");
+        int choice = sc.nextInt();
+
+        System.out.print("Username: ");
+        String uname = sc.next();
+        System.out.print("Password: ");
+        String pass = sc.next();
+
+        if (choice == 1 && admin.login(uname, pass)) {
+            System.out.println("\nAdmin login successful.");
+
+            Exam exam = new Exam("Java Basics");
+
+            String[] opts1 = {"OOP", "Procedural", "Functional", "None"};
+            String[] opts2 = {"class", "for", "int", "if"};
+            String[] opts3 = {"int a = 5;", "int = 5;", "a = int 5;", "5 = int a;"};
+
+            exam.addQuestion(new Question("Java is which type of language?", opts1, 1));
+            exam.addQuestion(new Question("Which is a keyword in Java?", opts2, 1));
+            exam.addQuestion(new Question("Which is a valid Java statement?", opts3, 1));
+
+            admin.createExam(exam);
+
+        } else if (choice == 2 && student.login(uname, pass)) {
+            System.out.println("\nStudent login successful.");
+
+            Exam exam = new Exam("Java Basics");
+
+            String[] opts1 = {"OOP", "Procedural", "Functional", "None"};
+            String[] opts2 = {"class", "for", "int", "if"};
+            String[] opts3 = {"int a = 5;", "int = 5;", "a = int 5;", "5 = int a;"};
+
+            exam.addQuestion(new Question("Java is which type of language?", opts1, 1));
+            exam.addQuestion(new Question("Which is a keyword in Java?", opts2, 1));
+            exam.addQuestion(new Question("Which is a valid Java statement?", opts3, 1));
+
+            student.takeExam(exam);
+
+        } else {
+            System.out.println("Login failed. Invalid credentials.");
+        }
+
+        sc.close();
+    }
+}
