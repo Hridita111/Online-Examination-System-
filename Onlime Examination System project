@@ -40,8 +40,8 @@ class Student extends User {
         super(username, password);
     }
 
-    public void takeExam(Exam exam) {
-        score = exam.conductExam();
+    public void takeExam(Exam exam, Scanner sc) {
+        score = exam.conductExam(sc);
         System.out.println("You scored: " + score + " out of " + exam.getTotalMarks());
     }
 
@@ -62,14 +62,13 @@ class Question {
         this.correctOption = correctOption;
     }
 
-    public boolean askQuestion() {
-        Scanner sc = new Scanner(System.in);
+    public boolean askQuestion(Scanner sc) {
         System.out.println("\n" + questionText);
         for (int i = 0; i < options.length; i++) {
             System.out.println((i + 1) + ". " + options[i]);
         }
 
-        System.out.print("Your answer (1-4): ");
+        System.out.print("Your answer (1-" + options.length + "): ");
         int answer = sc.nextInt();
         return answer == correctOption;
     }
@@ -96,10 +95,10 @@ class Exam {
         return questions.size();
     }
 
-    public int conductExam() {
+    public int conductExam(Scanner sc) {
         int score = 0;
         for (Question q : questions) {
-            if (q.askQuestion()) {
+            if (q.askQuestion(sc)) {
                 score++;
             }
         }
@@ -153,7 +152,7 @@ public class Main {
             exam.addQuestion(new Question("Which is a keyword in Java?", opts2, 1));
             exam.addQuestion(new Question("Which is a valid Java statement?", opts3, 1));
 
-            student.takeExam(exam);
+            student.takeExam(exam, sc);
 
         } else {
             System.out.println("Login failed. Invalid credentials.");
